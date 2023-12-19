@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\ProductoController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -26,5 +27,7 @@ Route::post('logueo',[AuthController::class,'login']);
 //Rutas que se pueda acceder a ellas cuando estemos en la sesión
 Route::middleware(['auth:api'])->group(function(){
     
+    Route::get('verProductos',[ProductoController::class,'index']);
+
     Route::get('cerrarSesion',[AuthController::class,'logout']);
 });
