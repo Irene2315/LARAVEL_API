@@ -13,6 +13,8 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule): void
     {
         // $schedule->command('inspire')->hourly();
+        $schedule->exec('php artisan app:migrar-actual-fake-items')->everyMinute();
+        $schedule->exec('php artisan app:migrar-historico')->everyMinute();
     }
 
     /**
