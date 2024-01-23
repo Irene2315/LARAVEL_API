@@ -1,13 +1,10 @@
 <?php
 
 namespace Database\Factories;
-use App\Models\Lectura_Item_Meteo;
 
+use App\Models\Lectura_Item_Meteo;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Lectura_Item_Meteo>
- */
 class Lectura_Item_MeteoFactory extends Factory
 {
     /**
@@ -17,7 +14,7 @@ class Lectura_Item_MeteoFactory extends Factory
      */
     public function definition(): array
     {
-        
+        // Definición predeterminada para el primer tipo de respuesta
         return [
             'idLugar' => $this->faker->unique()->randomElement(['20018','48017','48020','20029','20069','20030','20045','20071']),
             'fecha_hora' => $this->faker->unique()->dateTimeBetween('-1 month', '+1 month'),
@@ -27,5 +24,19 @@ class Lectura_Item_MeteoFactory extends Factory
             'prevision' => $this->faker->randomElement(['Soleado','Nublado','Lluvia','Nieve']),
         ];
     }
-    
+
+    /**
+     * Define the "now" state for the model.
+     *
+     * @return \Illuminate\Database\Eloquent\Factories\Factory
+     */
+    public function now(): Factory
+    {
+        // Definición para el segundo tipo de respuesta
+        return $this->state(function (array $attributes) {
+            return [
+                'fecha_hora' => now(),
+            ];
+        });
+    }
 }

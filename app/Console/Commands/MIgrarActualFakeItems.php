@@ -27,6 +27,6 @@ class MigrarActualFakeItems extends Command
      */
     public function handle()
     {
-        Lectura_Item_Meteo::factory(ActualFakeFactory::class)->count(4)->create();
+        Lectura_Item_Meteo::factory()->now()->count(5)->create();
     }
 }

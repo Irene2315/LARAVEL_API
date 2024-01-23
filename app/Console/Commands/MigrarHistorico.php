@@ -27,6 +27,6 @@ class MigrarHistorico extends Command
      */
     public function handle()
     {
-        Lectura_Item_Meteo::factory()->count(4)->create();
+        Lectura_Item_Meteo::factory()->count(8)->create();
     }
 }
