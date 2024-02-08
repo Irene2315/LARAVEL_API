@@ -3,13 +3,76 @@
 namespace App\Http\Controllers;
 
 use App\Models\Lectura_Item_Meteo;
-use App\Models\Lugar;
+
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Http;
+
 
 class LecturaItemMeteoController extends Controller
 {
 
+    public function itemsLugares($lugares)
+    {
+        $itemsLugares = [];
+
+        $arrayDeIdLugares = json_decode($lugares);
+
+        foreach ($arrayDeIdLugares as $cod_ciudad) {
+            $itemsLugar = Lectura_Item_Meteo::where('idLugar', $cod_ciudad)->get();
+
+            if ($itemsLugar) {
+                array_push($itemsLugares, $itemsLugar);
+            }
+
+        }
+
+
+        return response()->json($itemsLugares);
+    }
+
+    public function itemsLugarAhora($lugares)
+    {
+        $itemsLugaresAhora = [];
+
+        $arrayDeIdLugares = json_decode($lugares);
+
+        foreach ($arrayDeIdLugares as $cod_ciudad) {
+            $itemsLugarAhora = Lectura_Item_Meteo::where('idLugar', $cod_ciudad)
+                ->latest('fecha_hora')
+                ->first();
+
+            if ($itemsLugarAhora) {
+                array_push($itemsLugaresAhora, $itemsLugarAhora);
+            }
+
+        }
+
+
+        return response()->json($itemsLugaresAhora);
+    }
+
+    public function itemsLugar($lugar, $fechaInicio, $fechaFin)
+    {
+
+        $idLugar = json_decode($lugar);
+
+        
+        $itemsLugar = Lectura_Item_Meteo::where('idLugar', $idLugar)
+            ->whereBetween('fecha_hora', [$fechaInicio, $fechaFin])
+            ->groupBy(Lectura_Item_Meteo::raw('DATE(fecha_hora)'))
+            ->select([
+                Lectura_Item_Meteo::raw('DATE(fecha_hora) as fecha'),
+                Lectura_Item_Meteo::raw('AVG(valorTemp) as mediaTemp'),
+                Lectura_Item_Meteo::raw('AVG(valorHumedad) as mediaHumedad')
+            ])
+            ->orderBy('fecha', 'ASC') 
+            ->get();
+
+
+
+
+
+        return response()->json($itemsLugar);
+    }
     /**
      * Display a listing of the resource.
      */
